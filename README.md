@@ -8,7 +8,7 @@
 
 2. `remove_chastisements(schoolkid)`- удаляет все замечания у заданного ученика.
 
-3. `create_commendation(schoolkid_name, subject)`- добавляет случайную похвалу для заданного ученика по предмету (cписок записей для похвалы хранится в `COMMENDATIONS` внутри `scripts.py`).
+3. `create_commendation(schoolkid, subject)`- добавляет случайную похвалу для заданного ученика по предмету (cписок записей для похвалы хранится в `COMMENDATIONS` внутри `scripts.py`).
 
 ## Как использовать
 
