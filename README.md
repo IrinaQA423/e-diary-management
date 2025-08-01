@@ -23,6 +23,7 @@ python manage.py shell
 ```
 from scripts import fix_marks, remove_chastisements, create_commendation
 from datacenter.models import Schoolkid, Lesson, Commendation, Subject, Mark, Chastisement
+import random
 ```
 3. Найдите ученика. Например, Фрoлов Иван:
 
