@@ -17,21 +17,35 @@ COMMENDATIONS = [
     'Так держать!',
     'Здорово!',
     'Я тобой горжусь!',
-    'С каждым разом у тебя получается всё лучше!'
+    'С каждым разом у тебя получается всё лучше!',
     'Я вижу, как ты стараешься!',
     'Ты растешь над собой!'
 ]
 
 
 def fix_marks(schoolkid):
-
+    try:
+        schoolkid = Schoolkid.objects.get(full_name__contains=schoolkid)
+    except ObjectDoesNotExist:
+        print(f"Ученик с именем '{schoolkid}' не найден")
+        return
+    except MultipleObjectsReturned:
+        print(f"Найдено несколько учеников с именем '{schoolkid}'. Уточните ФИО")
+        return
     bad_marks = Mark.objects.filter(schoolkid=schoolkid, points__in=[2, 3])
     bad_marks.update(points=5)
     print(f"{bad_marks.count()} плохих оценок исправлено на пятёрки.")
 
 
 def remove_chastisements(schoolkid):
-
+    try:
+        schoolkid = Schoolkid.objects.get(full_name__contains=schoolkid)
+    except ObjectDoesNotExist:
+        print(f"Ученик с именем '{schoolkid}' не найден")
+        return
+    except MultipleObjectsReturned:
+        print(f"Найдено несколько учеников с именем '{schoolkid}'. Уточните ФИО")
+        return
     chastisements = Chastisement.objects.filter(schoolkid=schoolkid)
     count = chastisements.count()
     chastisements.delete()
