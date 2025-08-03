@@ -23,28 +23,30 @@ COMMENDATIONS = [
 ]
 
 
-def fix_marks(schoolkid):
+def get_schoolkid(name):
     try:
-        schoolkid = Schoolkid.objects.get(full_name__contains=schoolkid)
+        return Schoolkid.objects.get(full_name__contains=name)
+        
     except ObjectDoesNotExist:
-        print(f"Ученик с именем '{schoolkid}' не найден")
+        print(f"Ученик с именем '{name}' не найден")
         return
     except MultipleObjectsReturned:
-        print(f"Найдено несколько учеников с именем '{schoolkid}'. Уточните ФИО")
+        print(f"Найдено несколько учеников с именем '{name}'. Уточните ФИО")
+        return
+
+def fix_marks(schoolkid_name):
+    schoolkid = get_schoolkid(schoolkid_name)
+    if not schoolkid: 
         return
     bad_marks = Mark.objects.filter(schoolkid=schoolkid, points__in=[2, 3])
+    count = bad_marks.count()
     bad_marks.update(points=5)
-    print(f"{bad_marks.count()} плохих оценок исправлено на пятёрки.")
+    print(f"{count} плохих оценок исправлено на пятёрки.")
 
 
-def remove_chastisements(schoolkid):
-    try:
-        schoolkid = Schoolkid.objects.get(full_name__contains=schoolkid)
-    except ObjectDoesNotExist:
-        print(f"Ученик с именем '{schoolkid}' не найден")
-        return
-    except MultipleObjectsReturned:
-        print(f"Найдено несколько учеников с именем '{schoolkid}'. Уточните ФИО")
+def remove_chastisements(schoolkid_name):
+    schoolkid = get_schoolkid(schoolkid_name)
+    if not schoolkid: 
         return
     chastisements = Chastisement.objects.filter(schoolkid=schoolkid)
     count = chastisements.count()
@@ -52,16 +54,10 @@ def remove_chastisements(schoolkid):
     print(f"Удалено {count} замечаний")
 
 
-def create_commendation(schoolkid, subject):
-    try:
-        schoolkid = Schoolkid.objects.get(full_name__contains=schoolkid)
-    except ObjectDoesNotExist:
-        print(f"Ученик с именем '{schoolkid}' не найден")
+def create_commendation(schoolkid_name, subject):
+    schoolkid = get_schoolkid(schoolkid_name)
+    if not schoolkid:  
         return
-    except MultipleObjectsReturned:
-        print(f"Найдено несколько учеников с именем '{schoolkid}'. Уточните ФИО")
-        return
-
     lesson = Lesson.objects.filter(
         subject__title=subject,
         year_of_study=schoolkid.year_of_study,
